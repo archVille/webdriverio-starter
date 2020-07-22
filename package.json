@@ -1,0 +1,28 @@
+{
+  "name": "webdriverio-starter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "wdio.conf.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "selenium-standalone": "^6.17.0",
+    "webdriverio": "^6.1.17"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/archVille/webdriverio-starter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/archVille/webdriverio-starter/issues"
+  },
+  "homepage": "https://github.com/archVille/webdriverio-starter#readme"
+}
