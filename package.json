@@ -7,11 +7,15 @@
     "test": "test"
   },
   "dependencies": {
+    "bufferutil": "^4.0.1",
     "express": "^4.17.1",
     "selenium-standalone": "^6.17.0",
+    "utf-8-validate": "^5.0.2",
     "webdriverio": "^6.1.17"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@wdio/cli": "^6.3.4"
+  },
   "scripts": {
     "test": "mocha"
   },
