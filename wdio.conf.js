@@ -51,8 +51,13 @@ exports.config = {
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
         maxInstances: 5,
+        // loggingPrefs: {
+        //     browser: 'ALL',
+        //     client: 'ALL'
+        // },
         //
         browserName: 'chrome',
+       
         acceptInsecureCerts: true
         // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.
@@ -67,6 +72,7 @@ exports.config = {
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
     logLevel: 'info',
+    
     //
     // Set specific log levels per logger
     // loggers:
@@ -77,10 +83,10 @@ exports.config = {
     // - @wdio/sumologic-reporter
     // - @wdio/cli, @wdio/config, @wdio/sync, @wdio/utils
     // Level of logging verbosity: trace | debug | info | warn | error | silent
-    // logLevels: {
-    //     webdriver: 'info',
-    //     '@wdio/applitools-service': 'info'
-    // },
+    logLevels: {
+        webdriver: 'info',
+        '@wdio/applitools-service': 'info'
+    },
     //
     // If you only want to run your tests until a specific amount of tests have failed use
     // bail (default is 0 - don't bail, run all tests).
@@ -184,8 +190,37 @@ exports.config = {
      * @param {String} commandName hook command name
      * @param {Array} args arguments that command would receive
      */
-    // beforeCommand: function (commandName, args) {
-    // },
+
+     // I THINK THE ABOVE DOESNT REALLY WORK
+    beforeCommand: function (commandName, args) {
+        if (browser.getUrl().indexOf(this.baseUrl) > -1) {
+            browser.execute(function () {
+                if (window.wdioErrorHandler !== window.onerror) {
+                    const oldHandler = window.onerror;
+                    window.windowErrors = [];
+                    window.onerror = window.wdioErrorHandler = function (err) {
+                        window.windowErrors.push(err + '');
+                        if (typeof oldHandler === 'function') {
+                            oldHandler.apply(this, arguments);
+                        }
+                    }
+                }
+            })
+        }
+    },
+
+    afterCommand: function (commandName, args, result, error) {
+        if (browser.getUrl().indexOf(this.baseUrl) > -1) {
+            const errors = browser.execute(function () {
+                return window.windowErrors;
+            });
+            
+            if (errors.value !== null && errors.value.length > 0) {
+                
+                throw new Error('Javascript errors! ' + errors.value);
+            }
+        }
+    },
     /**
      * Hook that gets executed before the suite starts
      * @param {Object} suite suite details
